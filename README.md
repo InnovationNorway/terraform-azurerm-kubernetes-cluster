@@ -8,7 +8,7 @@ module "aks" {
   source  = "innovationnorway/kubernetes-cluster/azurerm"
 
   name_prefix    = "example"
-  resource_group = "demo-services-rg"
+  resource_group = "example-rg"
 
   default_node_pool = {
       name       = "default"
