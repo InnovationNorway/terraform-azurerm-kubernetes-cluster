@@ -10,4 +10,8 @@ locals {
       tags         = np.tags
     }
   ])
+  # var.kubernetes_version defaults to unknown if there is no value input
+  # and if that is the case, we will use the data source to determinate the
+  # latest version of kubernetes
+  kubernetes_version = var.kubernetes_version == "unknown" ? data.azurerm_kubernetes_service_versions.current.latest_version : var.kubernetes_version
 }

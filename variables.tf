@@ -12,6 +12,12 @@ variable "resource_group" {
   description = "The resource group you want to deploy the AKS cluster in."
 }
 
+
+variable "kubernetes_version" {
+  type    = string
+  default = "unknown"
+}
+
 variable "default_node_pool" {
   type = map
 }
