@@ -9,12 +9,10 @@ data "azurerm_resource_group" "cluster" {
 ##- Fetching the current verson of AKS
 data "azurerm_kubernetes_service_versions" "current" {
   location = "West Europe"
+  include_preview = false
 }
-
-output "versions" {
-  value = data.azurerm_kubernetes_service_versions.current.versions
-}
-
-output "latest_version" {
-  value = data.azurerm_kubernetes_service_versions.current.latest_version
+data "azurerm_subnet" "cluster" {
+  name                 = var.subnet[0].subnet_name
+  virtual_network_name = var.subnet[0].vnet_name
+  resource_group_name  = var.subnet[0].resource_group_name
 }

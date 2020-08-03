@@ -12,14 +12,29 @@ variable "resource_group" {
   description = "The resource group you want to deploy the AKS cluster in."
 }
 
-
-variable "kubernetes_version" {
-  type    = string
-  default = "unknown"
+variable "subnet" {
+  type = list(object({
+    subnet_name         = string
+    vnet_name           = string
+    resource_group_name = string
+  }))
 }
 
+variable "kubernetes_version" {
+  type        = string
+  default     = "unknown"
+}
+
+variable "role_based_access_control" {
+  type        = bool
+  default     = false
+}
+variable "enable_pod_security_policy" {
+  type        = bool
+  default     = true
+}
 variable "default_node_pool" {
-  type = map
+  type        = map
 }
 
 variable "additional_node_pools" {
