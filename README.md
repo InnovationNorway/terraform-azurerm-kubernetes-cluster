@@ -44,3 +44,31 @@ terraform {
   }
 }
 ```
+
+## Arguments
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `name` | `string` | The name of the managed cluster. |
+| `resource_group` | `string` | The name of an existing resource group. |
+| `kubernetes_version` | `string` | The Kubernetes version to use, defaults to latest stable version. |
+| `default_node_pool` | `list` | List of configuration options for the default node pool. |
+| `subnet` | `list` | List to identify the subnet we want to deploy to. |
+| `tags` | `map` | A mapping of tags to assign to the resources. |
+
+`default_node_pool`:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `name` | `string` | The name of the node pool. |
+| `vm_size` | `string` | The size of the VMs in the node pool. |
+| `node_count` | `number` | The number of nodes. |
+
+
+`subnet`:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `subnet_name` | `string` | The name of the subnet. |
+| `vnet_name` | `string` | The VNet the subnet is located in. |
+| `resource_group_name` | `string` | The resource group the VNet is located in. |

@@ -2,7 +2,7 @@
 ##-- INPUT VARIABLES --##
 #########################
 
-variable "name_prefix" {
+variable "name" {
   type        = string
   description = "Name to make the cluster unique. Example, Projectname or business unit."
 }
@@ -34,7 +34,11 @@ variable "enable_pod_security_policy" {
   default     = true
 }
 variable "default_node_pool" {
-  type        = map
+  type = list(object({
+    name       = string
+    vm_size    = string
+    node_count = string
+  }))
 }
 
 variable "additional_node_pools" {
@@ -44,4 +48,8 @@ variable "additional_node_pools" {
     node_count   = number
     tags         = map(string)
   }))
+}
+
+variable "tags" {
+  type          = map(string)
 }

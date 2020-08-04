@@ -5,10 +5,10 @@
 ##- AKS cluster -##
 resource "azurerm_kubernetes_cluster" "cluster" {
   # Set name, location, resource group and dns prefix
-  name                = format("k8s-%s-%s", var.name_prefix, data.azurerm_resource_group.cluster.location)
+  name                = format("k8s-%s-%s", var.name, data.azurerm_resource_group.cluster.location)
   location            = data.azurerm_resource_group.cluster.location
   resource_group_name = data.azurerm_resource_group.cluster.name
-  dns_prefix          = var.name_prefix
+  dns_prefix          = var.name
 
   # If kubernetes version is specified, we will attempt to use that
   # If not specified, use the latest non-preview version available in AKS
@@ -26,10 +26,10 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   enable_pod_security_policy = var.enable_pod_security_policy
 
   default_node_pool {
-    name            = var.default_node_pool.name
+    name            = var.default_node_pool[0].name
     vnet_subnet_id  = data.azurerm_subnet.cluster.id
-    vm_size         = var.default_node_pool.vm_size
-    node_count      = var.default_node_pool.node_count
+    vm_size         = var.default_node_pool[0].vm_size
+    node_count      = var.default_node_pool[0].node_count
 
   }
 
