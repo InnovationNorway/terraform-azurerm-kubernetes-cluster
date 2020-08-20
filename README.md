@@ -7,19 +7,25 @@ Module for creating a managed Kubernetes cluster (AKS).
 module "aks" {
   source  = "innovationnorway/kubernetes-cluster/azurerm"
 
-  name_prefix    = "example"
+  name    = "example"
   resource_group = "example-rg"
+
+  subnet = [{
+    subnet_name         = "aks"
+    vnet_name           = "vnet-example"
+    resource_group_name = "vnet-test"
+  }]
 
   default_node_pool = {
       name       = "default"
-      vm_size    = "Standard_F2s_v2"
+      vm_size    = "Standard_D2s_v3"
       node_count = 2
     }
 
   additional_node_pools = [
     {
       name       = "pool2"
-      vm_size    = "Standard_F2s_v2"
+      vm_size    = "Standard_D4s_v3"
       node_count = 1
       tags = {
         source = "terraform"
@@ -27,7 +33,7 @@ module "aks" {
     },
     {
       name       = "pool3"
-      vm_size    = "Standard_F2s_v2"
+      vm_size    = "Standard_D4s_v3"
       node_count = 3
       tags = {
         source = "terraform"

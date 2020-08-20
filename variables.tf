@@ -35,10 +35,21 @@ variable "enable_pod_security_policy" {
 }
 variable "default_node_pool" {
   type = list(object({
-    name       = string
-    vm_size    = string
-    node_count = string
+    name        = string
+    vm_size     = string
+    node_count  = number
   }))
+  default = [
+    {
+      name          = "System Pool"
+      vm_size       = "Standard_D2s_v3"
+      node_count    = 3
+    }
+  ]
+}
+variable "default_node_pool_system_only" {
+  type    = list(string)
+  default = ["CriticalAddonsOnly=true:NoSchedule"]
 }
 
 variable "additional_node_pools" {
@@ -51,5 +62,5 @@ variable "additional_node_pools" {
 }
 
 variable "tags" {
-  type          = map(string)
+  type = map(string)
 }

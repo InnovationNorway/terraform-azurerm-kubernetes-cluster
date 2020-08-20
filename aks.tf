@@ -16,7 +16,10 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   kubernetes_version  = local.kubernetes_version
 
   network_profile {
-    network_plugin  = "azure"
+    network_plugin      = "azure"
+    service_cidr        = "10.10.0.0/16"
+    dns_service_ip      = "10.10.0.10"
+    docker_bridge_cidr  = "172.17.0.1/16"
   }
 
   role_based_access_control {
@@ -30,13 +33,15 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     vnet_subnet_id  = data.azurerm_subnet.cluster.id
     vm_size         = var.default_node_pool[0].vm_size
     node_count      = var.default_node_pool[0].node_count
-
+    #node_taints     = var.default_node_pool_system_only
   }
 
   service_principal {
     client_id       = azuread_service_principal.cluster.application_id
     client_secret   = random_password.cluster.result
   }
+
+  tags = var.tags
 }
 ##- Additional nodepools -##
 resource "azurerm_kubernetes_cluster_node_pool" "additional_cluster" {
