@@ -15,6 +15,18 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   # See the local value for more details
   kubernetes_version  = local.kubernetes_version
 
+  # Use the log analytics workspace in West Europe
+  addon_profile {
+    kube_dashboard {
+      enabled = true
+    }
+
+    oms_agent {
+      enabled                    = true
+      log_analytics_workspace_id = data.azurerm_log_analytics_workspace.westeurope.id
+    }
+  }
+
   network_profile {
     network_plugin      = "azure"
     service_cidr        = "10.10.0.0/16"
@@ -33,7 +45,13 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     vnet_subnet_id  = data.azurerm_subnet.cluster.id
     vm_size         = var.default_node_pool[0].vm_size
     node_count      = var.default_node_pool[0].node_count
-    #node_taints     = var.default_node_pool_system_only
+
+    enable_auto_scaling = var.default_node_pool[0].enable_auto_scaling
+    min_count           = var.default_node_pool[0].min_count
+    max_count           = var.default_node_pool[0].max_count
+
+    node_taints = [var.default_node_pool[0].node_taints]
+    #node_taints     = var.default_node_pool_system_only == true ? ["CriticalAddonsOnly=true:NoSchedule"] : [""]
   }
 
   service_principal {
@@ -51,6 +69,14 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional_cluster" {
   name                  = each.value.name
   vm_size               = each.value.vm_size
   node_count            = each.value.node_count
+  vnet_subnet_id        = each.value.vnet_subnet_id
+
+  enable_auto_scaling   = each.value.enable_auto_scaling
+  min_count             = each.value.min_count
+  max_count             = each.value.max_count
+
+  node_labels           = each.value.node_labels
+  node_taints           = each.value.node_taints
 
   tags = each.value.tags
 }

@@ -4,10 +4,16 @@
 locals {
   additional_node_pools = flatten([
     for np in var.additional_node_pools : {
-      name         = np.name
-      vm_size      = np.vm_size
-      node_count   = np.node_count
-      tags         = np.tags
+      name                = np.name
+      vm_size             = np.vm_size
+      node_count          = np.node_count
+      vnet_subnet_id      = np.vnet_subnet_id
+      enable_auto_scaling = np.enable_auto_scaling
+      min_count           = np.min_count
+      max_count           = np.max_count
+      node_labels         = np.node_labels
+      node_taints         = np.node_taints
+      tags                = np.tags
     }
   ])
   # var.kubernetes_version defaults to unknown if there is no value input
