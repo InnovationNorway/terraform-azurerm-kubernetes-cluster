@@ -35,7 +35,11 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   }
 
   role_based_access_control {
-    enabled         = var.role_based_access_control
+    enabled = var.role_based_access_control
+  }
+
+  azure_policy {
+    enabled = var.enable_azure_policy
   }
 
   enable_pod_security_policy = var.enable_pod_security_policy
@@ -79,4 +83,11 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional_cluster" {
   node_taints           = each.value.node_taints
 
   tags = each.value.tags
+}
+
+resource "kubernetes_namespace" "cluster" {
+  for_each = var.namespace
+  metadata {
+    name = each.key
+  }
 }

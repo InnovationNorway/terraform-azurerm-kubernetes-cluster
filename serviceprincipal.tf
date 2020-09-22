@@ -20,5 +20,5 @@ resource "random_password" "cluster" {
 resource "azuread_service_principal_password" "cluster" {
   service_principal_id = azuread_service_principal.cluster.id
   value                = random_password.cluster.result
-  end_date_relative    = "24h"
+  end_date_relative    = "8766h"
 }

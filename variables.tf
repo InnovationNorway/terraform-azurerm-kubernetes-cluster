@@ -29,10 +29,17 @@ variable "role_based_access_control" {
   type        = bool
   default     = true
 }
+
 variable "enable_pod_security_policy" {
+  type        = bool
+  default     = false
+}
+
+variable "enable_azure_policy" {
   type        = bool
   default     = true
 }
+
 variable "default_node_pool" {
   type = list(object({
     name                = string
@@ -73,4 +80,8 @@ variable "additional_node_pools" {
 
 variable "tags" {
   type = map(string)
+}
+
+variable "namespace" {
+  type = list(string)
 }
