@@ -7,7 +7,6 @@ locals {
       name                = np.name
       vm_size             = np.vm_size
       node_count          = np.node_count
-      vnet_subnet_id      = np.vnet_subnet_id
       enable_auto_scaling = np.enable_auto_scaling
       min_count           = np.min_count
       max_count           = np.max_count

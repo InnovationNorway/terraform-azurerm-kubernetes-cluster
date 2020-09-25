@@ -5,9 +5,9 @@
 ##- AKS cluster -##
 resource "azurerm_kubernetes_cluster" "cluster" {
   # Set name, location, resource group and dns prefix
-  name                = format("k8s-%s-%s", var.name, data.azurerm_resource_group.cluster.location)
-  location            = data.azurerm_resource_group.cluster.location
-  resource_group_name = data.azurerm_resource_group.cluster.name
+  name                = format("k8s-%s-%s", var.name, var.location)
+  location            = var.location
+  resource_group_name = var.resource_group
   dns_prefix          = var.name
 
   # If kubernetes version is specified, we will attempt to use that
@@ -15,11 +15,17 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   # See the local value for more details
   kubernetes_version  = local.kubernetes_version
 
-  # Use the log analytics workspace in West Europe
+  # Enable kube_dashboard, Azure Policy and the OMS agent
+  # Set to use the log analytics workspace in West Europe, will be updated to use
+  # data from a logging workspace in Terraform Cloud
   addon_profile {
     kube_dashboard {
       enabled = true
     }
+
+    azure_policy {
+    enabled = var.enable_azure_policy
+  }
 
     oms_agent {
       enabled                    = true
@@ -38,15 +44,11 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     enabled = var.role_based_access_control
   }
 
-  azure_policy {
-    enabled = var.enable_azure_policy
-  }
-
   enable_pod_security_policy = var.enable_pod_security_policy
 
   default_node_pool {
     name            = var.default_node_pool[0].name
-    vnet_subnet_id  = data.azurerm_subnet.cluster.id
+    vnet_subnet_id  = var.subnet_id
     vm_size         = var.default_node_pool[0].vm_size
     node_count      = var.default_node_pool[0].node_count
 
@@ -73,7 +75,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional_cluster" {
   name                  = each.value.name
   vm_size               = each.value.vm_size
   node_count            = each.value.node_count
-  vnet_subnet_id        = each.value.vnet_subnet_id
+  vnet_subnet_id        = var.subnet_id
 
   enable_auto_scaling   = each.value.enable_auto_scaling
   min_count             = each.value.min_count
@@ -83,11 +85,4 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional_cluster" {
   node_taints           = each.value.node_taints
 
   tags = each.value.tags
-}
-
-resource "kubernetes_namespace" "cluster" {
-  for_each = var.namespace
-  metadata {
-    name = each.key
-  }
 }

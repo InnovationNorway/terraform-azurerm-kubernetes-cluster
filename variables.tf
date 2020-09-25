@@ -12,13 +12,12 @@ variable "resource_group" {
   description = "The resource group you want to deploy the AKS cluster in."
 }
 
-variable "subnet" {
-  type = list(object({
-    subnet_name         = string
-    vnet_name           = string
-    resource_group_name = string
-  }))
+variable "location" {
+  type        = string
+  description = "The location you want to deploy the AKS cluster to."
 }
+
+variable "subnet_id" {}
 
 variable "kubernetes_version" {
   type        = string
@@ -54,7 +53,7 @@ variable "default_node_pool" {
     {
       name                = "default"
       vm_size             = "Standard_D2s_v3"
-      node_count          = 3
+      node_count          = null
       enable_auto_scaling = false
       min_count           = 1
       max_count           = 3
@@ -68,7 +67,6 @@ variable "additional_node_pools" {
     name                = string
     vm_size             = string
     node_count          = number
-    vnet_subnet_id      = string
     enable_auto_scaling = bool
     min_count           = number
     max_count           = number

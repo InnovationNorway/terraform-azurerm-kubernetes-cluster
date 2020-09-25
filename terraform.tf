@@ -8,13 +8,12 @@ terraform {
   }
 }
 
-# Kubernetes provider
 provider "kubernetes" {
   load_config_file = "false"
 
-  host = azurerm_kubernetes_cluster.cluster.kube_admin_config.host
+  host                   = azurerm_kubernetes_cluster.cluster.kube_config.0.host
 
-  client_certificate     = azurerm_kubernetes_cluster.cluster.kube_admin_config.client_certificate
-  client_key             = azurerm_kubernetes_cluster.cluster.kube_admin_config.client_key
-  cluster_ca_certificate = azurerm_kubernetes_cluster.cluster.kube_admin_config.cluster_ca_certificate
+  client_certificate     = base64decode(azurerm_kubernetes_cluster.cluster.kube_config.0.client_certificate)
+  client_key             = base64decode(azurerm_kubernetes_cluster.cluster.kube_config.0.client_key)
+  cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.cluster.kube_config.0.cluster_ca_certificate)
 }
