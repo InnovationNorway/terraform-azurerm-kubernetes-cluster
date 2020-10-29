@@ -5,7 +5,7 @@
 ##- AKS cluster -##
 resource "azurerm_kubernetes_cluster" "cluster" {
   # Set name, location, resource group and dns prefix
-  name                = format("k8s-%s-%s", var.name)
+  name                = format("k8s-%s", var.name)
   location            = var.location
   resource_group_name = var.resource_group
   dns_prefix          = var.name
