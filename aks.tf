@@ -57,7 +57,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     max_count           = var.default_node_pool[0].max_count
 
     node_taints = [var.default_node_pool[0].node_taints]
-    #node_taints     = var.default_node_pool_system_only == true ? ["CriticalAddonsOnly=true:NoSchedule"] : [""]
+    #CriticalAddonsOnly=true:NoSchedule
   }
 
   service_principal {
@@ -66,6 +66,8 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   }
 
   tags = var.tags
+
+  depends_on = [data.azurerm_resource_group.cluster]
 }
 ##- Additional nodepools -##
 resource "azurerm_kubernetes_cluster_node_pool" "additional_cluster" {

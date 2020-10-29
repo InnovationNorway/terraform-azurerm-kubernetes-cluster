@@ -49,6 +49,15 @@ terraform {
     azurerm = "2.20.0"
   }
 }
+provider "kubernetes" {
+  load_config_file = "false"
+
+  host                   = module.kubernetes-cluster.aks_host
+
+  client_certificate     = base64decode(module.kubernetes-cluster.aks_client_certificate)
+  client_key             = base64decode(module.kubernetes-cluster.aks_client_key)
+  cluster_ca_certificate = base64decode(module.kubernetes-cluster.aks_cluster_ca_certificate)
+}
 ```
 
 ## Arguments
