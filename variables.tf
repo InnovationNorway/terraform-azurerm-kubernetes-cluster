@@ -7,6 +7,12 @@ variable "name" {
   description = "Name to make the cluster unique. Example, Projectname or business unit."
 }
 
+variable "cluster_prefix" {
+  type = string
+  description = "Cluster deployment prefix"
+  default = "cluster-"
+}
+
 variable "resource_group" {
   type        = string
   description = "The resource group you want to deploy the AKS cluster in."
@@ -20,8 +26,16 @@ variable "location" {
 variable "subnet_id" {}
 
 variable "kubernetes_version" {
-  type        = string
-  default     = "unknown"
+  type    = string
+  default = "unknown"
+}
+variable "kubernetes_version_prefix" {
+  type    = string
+  default = "1.18"
+}
+variable "kubernetes_include_preview" {
+  type    = string
+  default = false
 }
 
 variable "role_based_access_control" {
@@ -30,13 +44,13 @@ variable "role_based_access_control" {
 }
 
 variable "enable_pod_security_policy" {
-  type        = bool
-  default     = false
+  type    = bool
+  default = false
 }
 
 variable "enable_azure_policy" {
-  type        = bool
-  default     = true
+  type    = bool
+  default = true
 }
 
 variable "default_node_pool" {
@@ -81,5 +95,13 @@ variable "tags" {
 }
 
 variable "namespace" {
+  type = list(string)
+}
+
+variable "log_analytics" {
+  type = string
+}
+
+variable "admin_groups" {
   type = list(string)
 }
