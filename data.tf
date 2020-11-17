@@ -6,12 +6,7 @@ data "azurerm_resource_group" "cluster" {
 }
 ## Fetching the current verson of AKS
 data "azurerm_kubernetes_service_versions" "current" {
-  location = "West Europe"
-  include_preview = false
-}
-
-## Log analytics workspace
-data "azurerm_log_analytics_workspace" "westeurope" {
-  name                = "core-sh-mon-pwe-law"
-  resource_group_name = "core-sh-mon-pwe-rg"
+  location        = data.azurerm_resource_group.cluster.location
+  version_prefix  = var.kubernetes_version_prefix
+  include_preview = var.kubernetes_include_preview
 }
