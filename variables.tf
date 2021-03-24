@@ -8,9 +8,9 @@ variable "name" {
 }
 
 variable "cluster_prefix" {
-  type = string
+  type        = string
   description = "Cluster deployment prefix"
-  default = "cluster-"
+  default     = "cluster-"
 }
 
 variable "resource_group" {
@@ -22,7 +22,17 @@ variable "location" {
   type        = string
   description = "The location you want to deploy the AKS cluster to."
 }
+variable "availability_zones" {
+  type        = list(string)
+  description = "A list of availability zones that the cluster will use. Defaults to 1, 2 and 3."
+  default     = ["1", "2", "3"]
+}
 
+variable "network_policy" {
+  type        = string
+  description = "Sets up network policy to be used with Azure CNI."
+  default     = "calico"
+}
 variable "subnet_id" {}
 
 variable "kubernetes_version" {
@@ -39,8 +49,8 @@ variable "kubernetes_include_preview" {
 }
 
 variable "role_based_access_control" {
-  type        = bool
-  default     = true
+  type    = bool
+  default = true
 }
 
 variable "enable_pod_security_policy" {
