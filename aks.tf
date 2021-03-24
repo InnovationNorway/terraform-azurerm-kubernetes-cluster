@@ -39,6 +39,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     service_cidr       = "10.10.0.0/16"
     dns_service_ip     = "10.10.0.10"
     docker_bridge_cidr = "172.17.0.1/16"
+    network_policy     = var.network_policy
   }
 
   role_based_access_control {
@@ -64,6 +65,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
 
     node_taints = [var.default_node_pool[0].node_taints]
     #CriticalAddonsOnly=true:NoSchedule
+    availability_zones = var.availability_zones
   }
 
   identity {
@@ -90,6 +92,8 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional_cluster" {
 
   node_labels = each.value.node_labels
   node_taints = each.value.node_taints
+
+  availability_zones = var.availability_zones
 
   tags = each.value.tags
 }
