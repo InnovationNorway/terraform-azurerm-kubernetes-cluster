@@ -19,21 +19,17 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   # Set to use the log analytics workspace in West Europe, will be updated to use
   # data from a logging workspace in Terraform Cloud
   addon_profile {
-
     kube_dashboard {
       enabled = true
     }
-
     azure_policy {
       enabled = var.enable_azure_policy
     }
-
     oms_agent {
       enabled                    = true
       log_analytics_workspace_id = var.log_analytics
     }
   }
-
   network_profile {
     network_plugin     = "azure"
     service_cidr       = "10.10.0.0/16"
@@ -41,10 +37,8 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     docker_bridge_cidr = "172.17.0.1/16"
     network_policy     = var.network_policy
   }
-
   role_based_access_control {
     enabled = var.role_based_access_control
-
     azure_active_directory {
       managed                = true
       admin_group_object_ids = var.admin_groups
@@ -63,9 +57,8 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     min_count           = var.default_node_pool[0].min_count
     max_count           = var.default_node_pool[0].max_count
 
-    node_taints = [var.default_node_pool[0].node_taints]
-    #CriticalAddonsOnly=true:NoSchedule
-    availability_zones = var.availability_zones
+    only_critical_addons_enabled = var.default_node_pool[0].criticalOnly
+    availability_zones           = var.availability_zones
   }
 
   identity {
