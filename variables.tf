@@ -71,7 +71,7 @@ variable "default_node_pool" {
     enable_auto_scaling = bool
     min_count           = number
     max_count           = number
-    node_taints         = string
+    criticalOnly        = bool
   }))
   default = [
     {
@@ -81,7 +81,7 @@ variable "default_node_pool" {
       enable_auto_scaling = false
       min_count           = 1
       max_count           = 3
-      node_taints         = false
+      criticalOnly        = false
     }
   ]
 }
